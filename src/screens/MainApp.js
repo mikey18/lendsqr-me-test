@@ -1,13 +1,11 @@
-import { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthContext } from '../contexts/AuthenticationContext';
 // import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 import AppStack from '../../src/screens/AppStack/AppStack';
 import AuthStack from '../../src/screens/AuthStack/AuthStack';
+import { useSelector } from 'react-redux';
 
-const InnerApp = () => {
-    const { isAuthenticated } = useContext(AuthContext);
+const MainApp = () => {
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
     return (
         // <GestureHandlerRootView style={{ flex: 1 }}>
@@ -19,4 +17,4 @@ const InnerApp = () => {
     );
 };
 
-export default InnerApp;
+export default MainApp;

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lendsqr</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">1d491ab9-2fe2-4b51-ab47-540ced37c018</string>
 </resources>

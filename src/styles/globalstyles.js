@@ -8,7 +8,6 @@ export const textColor = 'white';
 export const textInputBorder = 'grey';
 export const backgroundColor = 'white';
 
-
 export const globalstyles = StyleSheet.create({
     global_container: {
         flex: 1,

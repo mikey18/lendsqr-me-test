@@ -1,0 +1,49 @@
+1. Issue: Encountered the error "ANDROID_HOME not set in environment variables."
+    Solution: Ensure that the ANDROID_HOME path is correctly set in your environment variables.
+
+2. Recommendation: After installing a package, always review the setup instructions to properly configure it within the native app files.
+
+3. Troubleshooting: If you encounter errors, try clearing the cache as a first step.
+
+4. Issue: Gradle distribution failed to download.
+    Solution: Activated a VPN, which resolved the issue.
+
+5. Configuration: For the dotenv package to function correctly, ensure it is properly configured in the babel.config.js file.
+
+6. Environment Changes: If you modify any environment variables, make sure to clear the cache using the command npx react-native start --reset-cache.
+
+7. Moving your app location or Renaming your app, is complex, do it wih caution.
+
+8. Env cache was not clearing, went to react-native-dotenv docs to get the solutions
+
+9. To create apk, first write "gradlew clean", then "gradlew assembleRelease"                                                   
+                                                                                         
+
+COMMANDS
+link font: 
+npx react-native run-android
+npm run start
+npx react-native start --reset-cache
+
+BEST LIBRARIES TO IMPROVE APP PERFORMANCE
+
+react native mmkv 
+react native flashlist by shopify
+
+74
+
+Walkthrough for different modes:
+
+Development Firebase
+run cd android && ./gradlew signingReport.
+Copy the SHA-1 hash and paste it into the firebase console under Android in Project Settings.
+Download the google-services.json file from the Firebase settings and paste the file into android/app
+Use the client client_type: 3 clientId inside the config.
+
+The below commands worked for me ...
+
+1. cd android
+
+2. gradlew clean
+
+3. gradlew assembleRelease

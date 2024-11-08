@@ -5,10 +5,10 @@ import {
     Pressable,
     ActivityIndicator,
     FlatList,
+    Image,
 } from 'react-native';
 import { storage } from '../../../storage/appstorage';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthenticationContext';
+import { useEffect, useState } from 'react';
 import {
     backgroundColor,
     font,
@@ -16,29 +16,38 @@ import {
     textColor,
 } from '../../../styles/globalstyles';
 import News from './News';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../../store/authSlice';
 import axios from 'axios';
+import { setNews } from '../../../store/newsSlice';
 import { dat } from './data';
 
 const NewsListing = ({ navigation }) => {
-    const { setIsAuthenticated } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState(dat);
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.news.data);
+    const userData = useSelector((state) => state.auth.userData);
 
     // useEffect(() => {
     //     const fetch_news_from_api = async () => {
-    //         const response = await axios.get(
-    //             'https://real-time-news-data.p.rapidapi.com/top-headlines?limit=50&country=US&lang=en',
-    //             {
-    //                 headers: {
-    //                     'x-rapidapi-host': 'real-time-news-data.p.rapidapi.com',
-    //                     'x-rapidapi-key':
-    //                         'f512b94653mshc88716c4903d7cap1285c8jsn85392892e029',
+    //         try {
+    //             const response = await axios.get(
+    //                 'https://real-time-news-data.p.rapidapi.com/top-headlines?limit=50&country=US&lang=en',
+    //                 {
+    //                     headers: {
+    //                         'x-rapidapi-host':
+    //                             'real-time-news-data.p.rapidapi.com',
+    //                         'x-rapidapi-key':
+    //                             'f512b94653mshc88716c4903d7cap1285c8jsn85392892e029',
+    //                     },
     //                 },
-    //             },
-    //         );
-    //         if (response.status === 200) {
-    //             setData(response.data.data);
-    //             setLoading(false);
+    //             );
+    //             if (response.status === 200) {
+    //                 dispatch(setNews(response.data.data));
+    //                 setLoading(false);
+    //             }
+    //         } catch (error) {
+    //             console.log('Error fetching news:', error.message);
     //         }
     //     };
 
@@ -49,20 +58,36 @@ const NewsListing = ({ navigation }) => {
 
     useEffect(() => {
         setTimeout(() => {
+            dispatch(setNews(dat));
             setLoading(false);
         }, 1000);
     }, []);
 
     const log_out = () => {
         storage.delete('auth');
-        setIsAuthenticated(false);
+        dispatch(logout());
+        dispatch(setNews(null));
+    };
+    const throwError = () => {
+        throw new Error('This is a runtime error triggered by the button!');
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.nav}>
-                <Text style={styles.header}>FP News</Text>
+                <View style={styles.avatar}>
+                    <Image
+                        style={styles.avatar_img}
+                        source={{ uri: userData.user.photo }}
+                    />
+                    <Text style={styles.header}>
+                        Hi, {userData.user.givenName}
+                    </Text>
+                </View>
 
+                <Pressable onPress={throwError} style={styles.logOut}>
+                    <Text style={styles.logOutText}>Throw Error</Text>
+                </Pressable>
                 <Pressable onPress={log_out} style={styles.logOut}>
                     <Text style={styles.logOutText}>Log out</Text>
                 </Pressable>
@@ -78,12 +103,7 @@ const NewsListing = ({ navigation }) => {
                     style={styles.newsView}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => {
-                        return (
-                            <News
-                                data={item}
-                                navigation={navigation}
-                            />
-                        );
+                        return <News data={item} navigation={navigation} />;
                     }}
                 />
             )}
@@ -107,9 +127,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    avatar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    avatar_img: {
+        height: 30,
+        width: 30,
+        borderRadius: 50,
+    },
     header: {
         fontFamily: font,
         fontSize: 20,
+        textAlignVertical: 'center',
     },
     logOut: {
         backgroundColor: 'red',

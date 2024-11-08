@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 30,
         backgroundColor: backgroundColor,
-
     },
     header: {
         fontSize: 30,
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     all_inputs: {
-        gap: 10
+        gap: 10,
     },
     label_input: {
         width: '90%',
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
         fontFamily: font,
         color: error_color,
         fontSize: 12,
-        textAlign: 'right'
+        textAlign: 'right',
     },
     button: {
         borderColor: textInputBorder,
