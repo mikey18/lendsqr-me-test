@@ -1,9 +1,16 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { font, primaryColor, backgroundColor } from '../../styles/globalstyles';
 import GoogleAuthButton from '../../components/GoogleAuthButton';
+import { useDispatch } from 'react-redux';
 
 const Login = ({ navigation }) => {
+    const dispatch = useDispatch();
+
     const navigate_to_signup = () => {
+        dispatch({
+            type: 'SCREEN_CHANGE',
+            payload: { screenName: 'SignUp' },
+        });
         navigation.navigate('SignUpOne');
     };
 

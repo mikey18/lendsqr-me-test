@@ -5,12 +5,14 @@ import MainApp from './src/screens/MainApp';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 import codePush from 'react-native-code-push';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+// import perf from '@react-native-firebase/perf';
+// import remoteConfig from '@react-native-firebase/remote-config';
+import messaging from '@react-native-firebase/messaging';
 
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-    statusCodes,
-} from '@react-native-google-signin/google-signin';
+messaging().onMessage(async (remoteMessage) => {
+    console.log('Received a new message!', remoteMessage);
+});
 
 GoogleSignin.configure();
 

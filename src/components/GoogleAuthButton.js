@@ -26,6 +26,10 @@ const GoogleAuthButton = ({ text }) => {
                 storage.set('auth', true);
                 storage.set('userData', JSON.stringify(response.data));
                 dispatch(setUserData(response.data));
+                dispatch({
+                    type: 'SCREEN_CHANGE',
+                    payload: { screenName: 'NewsListing' },
+                });
                 dispatch(login());
             } else {
                 console.log('Sign-in was cancelled or unsuccessful');

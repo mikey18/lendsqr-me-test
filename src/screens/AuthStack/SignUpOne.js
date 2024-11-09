@@ -7,7 +7,7 @@ import {
     textInputBorder,
 } from '../../styles/globalstyles';
 import { useState } from 'react';
-
+import { useDispatch } from 'react-redux';
 const error_color = 'red';
 
 const SignUpOne = ({ navigation }) => {
@@ -21,8 +21,13 @@ const SignUpOne = ({ navigation }) => {
         phone_number: null,
         email: null,
     });
+    const dispatch = useDispatch();
 
     const navigate_to_login = () => {
+        dispatch({
+            type: 'SCREEN_CHANGE',
+            payload: { screenName: 'LogIn' },
+        });
         navigation.goBack();
     };
 
@@ -67,6 +72,10 @@ const SignUpOne = ({ navigation }) => {
                 full_name: null,
                 phone_number: null,
                 email: null,
+            });
+            dispatch({
+                type: 'SCREEN_CHANGE',
+                payload: { screenName: 'SignUpTWo' },
             });
             navigation.navigate('SignUpTwo');
         }

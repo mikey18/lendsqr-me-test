@@ -4,13 +4,19 @@ import {
     font,
     fontMedium,
 } from '../../../styles/globalstyles';
+import { useDispatch } from 'react-redux';
 
 const News = ({ data, navigation }) => {
+    const dispatch = useDispatch();
     const date = new Date(data.published_datetime_utc).toLocaleDateString(
         'en-GB',
     );
 
     const go_to_details = () => {
+        dispatch({
+            type: 'SCREEN_CHANGE',
+            payload: { screenName: 'NewsDetails' },
+        });
         navigation.navigate('NewsDetails', data);
     };
 

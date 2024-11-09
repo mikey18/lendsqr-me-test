@@ -21,12 +21,36 @@ import { logout } from '../../../store/authSlice';
 import axios from 'axios';
 import { setNews } from '../../../store/newsSlice';
 import { dat } from './data';
+import crashlytics from '@react-native-firebase/crashlytics';
+import remoteConfig from '@react-native-firebase/remote-config';
+import perf from '@react-native-firebase/perf';
 
 const NewsListing = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const data = useSelector((state) => state.news.data);
     const userData = useSelector((state) => state.auth.userData);
+    const [welcomeText, setWelcomeText] = useState('Hi');
+
+    useEffect(() => {
+        remoteConfig()
+            .setConfigSettings({
+                minimumFetchIntervalMillis: 0,
+            })
+            .then(() => remoteConfig().fetchAndActivate())
+            .then((fetchedRemotely) => {
+                if (fetchedRemotely) {
+                    console.log('Configs were retrieved from Firebase');
+                } else {
+                    console.log('Configs were already up to date');
+                }
+                const text = remoteConfig().getValue('gretting').asString();
+                setWelcomeText(text);
+            })
+            .catch((error) =>
+                console.error('Error fetching remote config:', error),
+            );
+    }, []);
 
     // useEffect(() => {
     //     const fetch_news_from_api = async () => {
@@ -57,10 +81,17 @@ const NewsListing = ({ navigation }) => {
     // }, [data]);
 
     useEffect(() => {
-        setTimeout(() => {
-            dispatch(setNews(dat));
-            setLoading(false);
-        }, 1000);
+        const run = async () => {
+            const trace = await perf().newTrace('setNews_dispatch_trace');
+            trace.start();
+            setTimeout(async () => {
+                dispatch(setNews(dat));
+                setLoading(false);
+                await trace.stop();
+            }, 1000);
+        };
+
+        run();
     }, []);
 
     const log_out = () => {
@@ -69,7 +100,11 @@ const NewsListing = ({ navigation }) => {
         dispatch(setNews(null));
     };
     const throwError = () => {
-        throw new Error('This is a runtime error triggered by the button!');
+        const error = new Error(
+            'This is a runtime error triggered by the throw error button!',
+        );
+        crashlytics().recordError(error);
+        throw error;
     };
 
     return (
@@ -81,7 +116,7 @@ const NewsListing = ({ navigation }) => {
                         source={{ uri: userData.user.photo }}
                     />
                     <Text style={styles.header}>
-                        Hi, {userData.user.givenName}
+                        {welcomeText}, {userData.user.givenName}
                     </Text>
                 </View>
 
