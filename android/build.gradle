@@ -28,7 +28,9 @@ buildscript {
 
         // firebase crashlytics
         classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.2'
-
+        
+        // firebase app distribution
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:5.0.0'
     }
 }
 
